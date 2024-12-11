@@ -32,26 +32,32 @@ locals {
 
   vpc_cidr = "10.0.0.0/16"
   azs = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[2]]
-  az_abbr = {
-    "${local.azs[0]}" = "2a"
-    "${local.azs[1]}" = "2c"
-  }
 
   public_subnet_cidr = ["10.0.0.0/24", "10.0.1.0/24"]
 
   private_subnet_cidr = ["10.0.2.0/24", "10.0.3.0/24"]
 
-  SE_private_subnet_cidr = [
-      for i in range(0, 20) :
-      cidrsubnet("10.0.4.0/16", 8, i)
+  SE_private_subnet_cidr_a = [
+    for i in range(0, 9) :
+    cidrsubnet("10.0.4.0/16", 8, 2*i)
   ]
 
-  DBA_private_subnet_cidr = [
-      for i in range(0, 10) :
-      cidrsubnet("10.0.128.0/16", 8, i)
+  SE_private_subnet_cidr_c = [
+    for i in range(0, 9) :
+    cidrsubnet("10.0.5.0/16", 8, 2*i+1)
   ]
 
-  all_cidr = concat(local.public_subnet_cidr, local.private_subnet_cidr, local.SE_private_subnet_cidr, local.DBA_private_subnet_cidr)
+  DBA_private_subnet_cidr_a = [
+      for i in range(0, 5) :
+      cidrsubnet("10.0.128.0/16", 8, 2*i)
+  ]
+
+  DBA_private_subnet_cidr_c = [
+      for i in range(0, 5) :
+      cidrsubnet("10.0.128.0/16", 8, 2*i+1)
+  ]
+
+  # all_cidr = concat(local.public_subnet_cidr, local.private_subnet_cidr, local.SE_private_subnet_cidr, local.DBA_private_subnet_cidr)
 
   SE_owners = ["ckwon", "dhkil", "cgkim", "jjung", "hbjeon", "sbae", "kang-minlee", "ejang", "jun-heelee"]
   DBA_owners = ["hist_user_kimj", "swjang", "dyahn10", "ysbang", "dkim"]
