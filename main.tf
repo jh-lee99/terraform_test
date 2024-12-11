@@ -40,12 +40,12 @@ locals {
 
   SE_private_subnet_cidr_a = [
     for i in range(0, 9) :
-    cidrsubnet("10.0.4.0/17", 7, 2*i)
+    cidrsubnet("10.0.4.0/24", 0, 2*i)
   ]
 
   SE_private_subnet_cidr_c = [
     for i in range(0, 9) :
-    cidrsubnet("10.0.5.0/17", 7, 2*i+1)
+    cidrsubnet("10.0.5.0/24", 0, 2*i+1)
   ]
 
   DBA_private_subnet_cidr_a = [
