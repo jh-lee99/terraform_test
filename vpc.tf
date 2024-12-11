@@ -12,6 +12,10 @@ resource "aws_subnet" "public_subnet" {
   cidr_block        = local.public_subnet_cidr[count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
   map_public_ip_on_launch = true
+  
+  tags = {
+    "Name" = "${local.name}-PUB-${local.az_suffixes[count.index]}"
+  }
 }
 
 resource "aws_subnet" "private_subnet" {
@@ -20,6 +24,10 @@ resource "aws_subnet" "private_subnet" {
   cidr_block        = local.private_subnet_cidr[count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
   map_public_ip_on_launch = false
+
+  tags = {
+    "Name" = "${local.name}-PUB-${local.az_suffixes[count.index]}"
+  }
 }
 
 resource "aws_subnet" "SE_private_subnets_a" {
