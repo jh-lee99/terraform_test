@@ -12,7 +12,7 @@ resource "aws_subnet" "public_subnet" {
   cidr_block        = local.public_subnet_cidr[count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
   map_public_ip_on_launch = true
-  
+
   tags = {
     "Name" = "${local.name}-PUB-${local.az_suffixes[count.index]}"
   }
@@ -39,8 +39,9 @@ resource "aws_subnet" "SE_private_subnets_a" {
   map_public_ip_on_launch = false
   
   tags = {
-    Name  = "${local.SE_owners[index(local.SE_private_subnet_cidr_a, each.key)]}-TEST-PRI-${local.az_suffixes[0]}}"
+    Name  = "${local.SE_owners[index(local.SE_private_subnet_cidr_a, each.key)]}-TEST-PRI-${local.az_suffixes[0]}"
     Owner = local.SE_owners[index(local.SE_private_subnet_cidr_a, each.key)]
+    group = "SE"
   }
 }
 
@@ -55,6 +56,7 @@ resource "aws_subnet" "SE_private_subnets_c" {
   tags = {
     Name  = "${local.SE_owners[index(local.SE_private_subnet_cidr_c, each.key)]}-TEST-PRI-${local.az_suffixes[1]}"
     Owner = local.SE_owners[index(local.SE_private_subnet_cidr_c, each.key)]
+    group = "SE"
   }
 }
 
@@ -67,8 +69,9 @@ resource "aws_subnet" "DBA_private_subnets_a" {
   map_public_ip_on_launch = false
   
   tags = {
-    Name  = "${local.DBA_owners[index(local.DBA_private_subnet_cidr_a, each.key)]}-TEST-PRI-${local.az_suffixes[0]}}"
+    Name  = "${local.DBA_owners[index(local.DBA_private_subnet_cidr_a, each.key)]}-TEST-PRI-${local.az_suffixes[0]}"
     Owner = local.DBA_owners[index(local.DBA_private_subnet_cidr_a, each.key)]
+    group = "DBA"
   }
 }
 
@@ -83,6 +86,7 @@ resource "aws_subnet" "DBA_private_subnets_c" {
   tags = {
     Name  = "${local.DBA_owners[index(local.DBA_private_subnet_cidr_c, each.key)]}-TEST-PRI-${local.az_suffixes[1]}"
     Owner = local.DBA_owners[index(local.DBA_private_subnet_cidr_c, each.key)]
+    group = "DBA"
   }
 }
 
