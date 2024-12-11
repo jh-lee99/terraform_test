@@ -31,7 +31,8 @@ resource "aws_subnet" "private_subnet" {
 }
 
 resource "aws_subnet" "SE_private_subnets_a" {
-  for_each = toset(local.SE_private_subnet_cidr_a)
+  # for_each = toset(local.SE_private_subnet_cidr_a)
+  count = length(local.SE_private_subnet_cidr_a)
 
   vpc_id            = aws_vpc.SE_DBA-TEST.id
   cidr_block        = each.key
@@ -39,8 +40,8 @@ resource "aws_subnet" "SE_private_subnets_a" {
   map_public_ip_on_launch = false
   
   tags = {
-    Name  = "${local.SE_owners[index(local.SE_private_subnet_cidr_a, each.key)]}-TEST-PRI-${local.az_suffixes[0]}"
-    Owner = local.SE_owners[index(local.SE_private_subnet_cidr_a, each.key)]
+    Name  = "${local.SE_owners[count.index]}-TEST-PRI-${local.az_suffixes[0]}"
+    Owner = local.SE_owners[count.index]
     group = "SE"
   }
 }
