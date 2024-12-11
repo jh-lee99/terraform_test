@@ -15,7 +15,7 @@ resource "aws_subnet" "SE_private_subnets_a" {
   map_public_ip_on_launch = false
   
   tags = {
-    Name  = "${local.SE_owners[index(local.SE_private_subnet_cidr_a, each.key)]}-TEST-PRI-2a}"
+    Name  = "${local.SE_owners[index(local.SE_private_subnet_cidr_a, each.key)]}-TEST-PRI-${local.az_suffixes[0]}}"
     Owner = local.SE_owners[index(local.SE_private_subnet_cidr_a, each.key)]
   }
 }
@@ -29,7 +29,7 @@ resource "aws_subnet" "SE_private_subnets_c" {
   map_public_ip_on_launch = false
   
   tags = {
-    Name  = "${local.SE_owners[index(local.SE_private_subnet_cidr_c, each.key)]}-TEST-PRI-2c"
+    Name  = "${local.SE_owners[index(local.SE_private_subnet_cidr_c, each.key)]}-TEST-PRI-${local.az_suffixes[1]}"
     Owner = local.SE_owners[index(local.SE_private_subnet_cidr_c, each.key)]
   }
 }
@@ -43,7 +43,7 @@ resource "aws_subnet" "DBA_private_subnets_a" {
   map_public_ip_on_launch = false
   
   tags = {
-    Name  = "${local.DBA_owners[index(local.DBA_private_subnet_cidr_a, each.key)]}-TEST-PRI-2a}"
+    Name  = "${local.DBA_owners[index(local.DBA_private_subnet_cidr_a, each.key)]}-TEST-PRI-${local.az_suffixes[0]}}"
     Owner = local.DBA_owners[index(local.DBA_private_subnet_cidr_a, each.key)]
   }
 }
@@ -57,7 +57,7 @@ resource "aws_subnet" "DBA_private_subnets_c" {
   map_public_ip_on_launch = false
   
   tags = {
-    Name  = "${local.DBA_owners[index(local.DBA_private_subnet_cidr_c, each.key)]}-TEST-PRI-2c"
+    Name  = "${local.DBA_owners[index(local.DBA_private_subnet_cidr_c, each.key)]}-TEST-PRI-${local.az_suffixes[1]}"
     Owner = local.DBA_owners[index(local.DBA_private_subnet_cidr_c, each.key)]
   }
 }

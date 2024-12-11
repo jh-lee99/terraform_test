@@ -32,6 +32,7 @@ locals {
 
   vpc_cidr = "10.0.0.0/16"
   azs = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[2]]
+  az_suffixes = [for az in local.azs : substr(az, length(az) - 2, 2)]
 
   public_subnet_cidr = ["10.0.0.0/24", "10.0.1.0/24"]
 
