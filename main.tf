@@ -50,12 +50,12 @@ locals {
 
   DBA_private_subnet_cidr_a = [
       for i in range(0, 5) :
-      cidrsubnet("10.0.128.0/16", 8, 2*i)
+      cidrsubnet("10.0.128.0/17", 7, 2*i)
   ]
 
   DBA_private_subnet_cidr_c = [
       for i in range(0, 5) :
-      cidrsubnet("10.0.128.0/16", 8, 2*i+1)
+      cidrsubnet("10.0.128.0/17", 7, 2*i+1)
   ]
 
   # all_cidr = concat(local.public_subnet_cidr, local.private_subnet_cidr, local.SE_private_subnet_cidr, local.DBA_private_subnet_cidr)
