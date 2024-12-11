@@ -39,13 +39,13 @@ locals {
   private_subnet_cidr = ["10.0.2.0/24", "10.0.3.0/24"]
 
   SE_private_subnet_cidr_a = [
-    for i in range(0, 9) :
-    cidrsubnet("10.0.4.0/20", 4, 2*i)
+    for i in range(2, 11) :
+    cidrsubnet("10.0.4.0/16", 8, 2*i)
   ]
 
   SE_private_subnet_cidr_c = [
-    for i in range(0, 9) :
-    cidrsubnet("10.0.5.0/20", 4, 2*i+1)
+    for i in range(2, 11) :
+    cidrsubnet("10.0.5.0/16", 8, 2*i+1)
   ]
 
   DBA_private_subnet_cidr_a = [
