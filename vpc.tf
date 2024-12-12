@@ -10,7 +10,7 @@ resource "aws_subnet" "public_subnet" {
   count             = 2
   vpc_id            = aws_vpc.SE_DBA-TEST.id
   cidr_block        = local.public_subnet_cidr[count.index]
-  availability_zone = data.aws_availability_zones.available.names[count.index]
+  availability_zone = local.azs[count.index]
   map_public_ip_on_launch = true
 
   tags = {
@@ -22,7 +22,7 @@ resource "aws_subnet" "private_subnet" {
   count             = 2
   vpc_id            = aws_vpc.SE_DBA-TEST.id
   cidr_block        = local.private_subnet_cidr[count.index]
-  availability_zone = data.aws_availability_zones.available.names[count.index]
+  availability_zone = local.azs[count.index]
   map_public_ip_on_launch = false
 
   tags = {
