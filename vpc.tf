@@ -95,7 +95,7 @@ resource "aws_subnet" "DBA_private_subnets_c" {
 
 ### IGW, NAT ###
 resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.SE_DBA-TEST.id
 
   tags = {
     Name = "${local.name}-igw"
@@ -104,11 +104,11 @@ resource "aws_internet_gateway" "igw" {
 
 resource "aws_internet_gateway_attachment" "igw_attachment" {
   internet_gateway_id = aws_internet_gateway.igw.id
-  vpc_id              = aws_vpc.main.id
+  vpc_id              = aws_vpc.SE_DBA-TEST.id
 }
 
 resource "aws_nat_gateway" "ngw_a" {
-  allocation_id = aws_eip.example.id
+  allocation_id = aws_eip.nat_a_eip.id
   subnet_id     = aws_subnet.public_subnet[0].id
 
   tags = {
@@ -119,23 +119,26 @@ resource "aws_nat_gateway" "ngw_a" {
 }
 
 resource "aws_eip" "nat_a_eip" {
-  instance = aws_nat_gateway.ngw_a.id
   domain   = "vpc"
+
+  tags = {
+    "Name" = "${local.name}-eip"
+  }
 }
 
 ### ROUTING TABLE ###
 resource "aws_route_table" "PUB-rtb" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.SE_DBA-TEST.id
 
   route {
     cidr_block = "0.0.0.0/24"
-    gateway_id = aws_internet_gateway.main.id
+    gateway_id = aws_internet_gateway.igw.id
   }
 
-  route {
-    ipv6_cidr_block        = "::/0"
-    egress_only_gateway_id = aws_egress_only_internet_gateway.main.id
-  }
+  # route {
+  #   ipv6_cidr_block        = "::/0"
+  #   egress_only_gateway_id = aws_egress_only_internet_gateway.main.id
+  # }
 
   tags = {
     Name = "${local.name}-PUB-rtb"
@@ -143,22 +146,23 @@ resource "aws_route_table" "PUB-rtb" {
 }
 
 resource "aws_route_table_association" "PUB-rtb" {
-  subnet_id      = aws_subnet.public_subnet.id
+  count          = 2
+  subnet_id      = aws_subnet.public_subnet[count.index].id
   route_table_id = aws_route_table.PUB-rtb.id
 }
 
 resource "aws_default_route_table" "PRI-rtb" {
-  default_route_table_id = aws_vpc.main.default_route_table_id
+  default_route_table_id = aws_vpc.SE_DBA-TEST.default_route_table_id
 
   route {
     cidr_block = "0.0.0.0/24"
     gateway_id = aws_nat_gateway.ngw_a.id
   }
 
-  route {
-    ipv6_cidr_block        = "::/0"
-    egress_only_gateway_id = aws_egress_only_internet_gateway.main.id
-  }
+  # route {
+  #   ipv6_cidr_block        = "::/0"
+  #   egress_only_gateway_id = aws_egress_only_internet_gateway.main.id
+  # }
 
   tags = {
     Name = "${local.name}-PRI-rtb"
@@ -166,6 +170,6 @@ resource "aws_default_route_table" "PRI-rtb" {
 }
 
 resource "aws_main_route_table_association" "PRI-rtb" {
-  vpc_id         = aws_vpc.main.id
+  vpc_id         = aws_vpc.SE_DBA-TEST.id
   route_table_id = aws_default_route_table.PRI-rtb.id
 }
