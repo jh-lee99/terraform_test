@@ -102,10 +102,10 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-resource "aws_internet_gateway_attachment" "igw_attachment" {
-  internet_gateway_id = aws_internet_gateway.igw.id
-  vpc_id              = aws_vpc.SE_DBA-TEST.id
-}
+# resource "aws_internet_gateway_attachment" "igw_attachment" {
+#   internet_gateway_id = aws_internet_gateway.igw.id
+#   vpc_id              = aws_vpc.SE_DBA-TEST.id
+# }
 
 resource "aws_nat_gateway" "ngw_a" {
   allocation_id = aws_eip.nat_a_eip.id
