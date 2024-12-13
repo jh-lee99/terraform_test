@@ -169,6 +169,13 @@ resource "aws_default_route_table" "PRI-rtb" {
   }
 }
 
+resource "aws_route_table_association" "PRI-rtb" {
+  count          = length(local.SE_private_subnet_cidr_a)
+
+  subnet_id      = aws_subnet.public_subnet[count.index].id
+  route_table_id = aws_route_table.PRI-rtb.id
+}
+
 resource "aws_main_route_table_association" "PRI-rtb" {
   vpc_id         = aws_vpc.SE_DBA-TEST.id
   route_table_id = aws_default_route_table.PRI-rtb.id
