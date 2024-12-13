@@ -9,7 +9,8 @@ resource "aws_vpc" "SE_DBA-TEST" {
 
 ### SUBNET ###
 resource "aws_subnet" "public_subnet" {
-  count             = 2
+  count             = length(local.public_subnet_cidr)
+
   vpc_id            = aws_vpc.SE_DBA-TEST.id
   cidr_block        = local.public_subnet_cidr[count.index]
   availability_zone = local.azs[count.index]
@@ -21,7 +22,8 @@ resource "aws_subnet" "public_subnet" {
 }
 
 resource "aws_subnet" "private_subnet" {
-  count             = 2
+  count             = length(local.private_subnet_cidr)
+
   vpc_id            = aws_vpc.SE_DBA-TEST.id
   cidr_block        = local.private_subnet_cidr[count.index]
   availability_zone = local.azs[count.index]
@@ -33,7 +35,6 @@ resource "aws_subnet" "private_subnet" {
 }
 
 resource "aws_subnet" "SE_private_subnets_a" {
-  # for_each = toset(local.SE_private_subnet_cidr_a)
   count = length(local.SE_private_subnet_cidr_a)
 
   vpc_id            = aws_vpc.SE_DBA-TEST.id
@@ -146,9 +147,17 @@ resource "aws_route_table" "PUB-rtb" {
 }
 
 resource "aws_route_table_association" "PUB-rtb" {
-  count          = 2
+  count             = length(local.public_subnet_cidr)
+
   subnet_id      = aws_subnet.public_subnet[count.index].id
   route_table_id = aws_route_table.PUB-rtb.id
+}
+
+resource "aws_route_table_association" "PRI-rtb" {
+  count             = length(local.private_subnet_cidr)
+
+  subnet_id      = aws_subnet.private_subnet[count.index].id
+  route_table_id = aws_route_table.PRI-rtb.id
 }
 
 resource "aws_default_route_table" "PRI-rtb" {
