@@ -169,10 +169,31 @@ resource "aws_default_route_table" "PRI-rtb" {
   }
 }
 
-resource "aws_route_table_association" "PRI-rtb" {
+resource "aws_route_table_association" "SE-rtb-asso-a" {
   count          = length(local.SE_private_subnet_cidr_a)
 
-  subnet_id      = aws_subnet.public_subnet[count.index].id
+  subnet_id      = aws_subnet.SE_private_subnets_a[count.index].id
+  route_table_id = aws_default_route_table.PRI-rtb.id
+}
+
+resource "aws_route_table_association" "DBA-rtb-asso-a" {
+  count          = length(local.SE_private_subnet_cidr_a)
+
+  subnet_id      = aws_subnet.DBA_private_subnets_a[count.index].id
+  route_table_id = aws_default_route_table.PRI-rtb.id
+}
+
+resource "aws_route_table_association" "SE-rtb-asso-c" {
+  count          = length(local.SE_private_subnet_cidr_c)
+
+  subnet_id      = aws_subnet.SE_private_subnets_c[count.index].id
+  route_table_id = aws_default_route_table.PRI-rtb.id
+}
+
+resource "aws_route_table_association" "DBA-rtb-asso-c" {
+  count          = length(local.SE_private_subnet_cidr_c)
+
+  subnet_id      = aws_subnet.DBA_private_subnets_c[count.index].id
   route_table_id = aws_default_route_table.PRI-rtb.id
 }
 
