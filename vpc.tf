@@ -147,17 +147,17 @@ resource "aws_route_table" "PUB-rtb" {
 }
 
 resource "aws_route_table_association" "PUB-rtb" {
-  count             = length(local.public_subnet_cidr)
+  count          = length(local.public_subnet_cidr)
 
   subnet_id      = aws_subnet.public_subnet[count.index].id
   route_table_id = aws_route_table.PUB-rtb.id
 }
 
 resource "aws_route_table_association" "PRI-rtb" {
-  count             = length(local.private_subnet_cidr)
+  count          = length(local.private_subnet_cidr)
 
   subnet_id      = aws_subnet.private_subnet[count.index].id
-  route_table_id = aws_route_table.PRI-rtb.id
+  route_table_id = aws_default_route_table.PRI-rtb.id
 }
 
 resource "aws_default_route_table" "PRI-rtb" {
